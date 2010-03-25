@@ -3,12 +3,13 @@ NAME
     file
 
 VERSION
-    version 1.100840
+    version 1.100841
 
 SYNOPSIS
     In "dist.ini":
 
         [FatPacker]
+        script = bin/my_script
 
 DESCRIPTION
     This plugin uses App::FatPacker to pack your dependencies onto your
@@ -16,15 +17,18 @@ DESCRIPTION
 
 FUNCTIONS
   munge_file
-    Looks for a "__FATPACK__" marker and replaces the line it occurs in with
-    the packed dependencies. A good way of using this is in a comment line:
+    When processing the script file indicated by the "script" configuration
+    parameter, it prepends its packed dependencies to the script.
 
-        #!/usr/bin/env perl
-        # __FATPACK__
-        use strict;
-        use warnings;
-        use Foo::Bar;
-        use Hoge::Hoge;
+    This process creates temporary files outside the build directory, but if
+    there are no errors, they will be removed again.
+
+  safe_remove_tree
+    This is a wrapper around "remove_tree()" from "File::Path" that adds
+    some error checks.
+
+  safe_system
+    This is a wrapper around "system()" that adds some error checks.
 
 INSTALLATION
     See perlmodinstall for information and options on installing Perl

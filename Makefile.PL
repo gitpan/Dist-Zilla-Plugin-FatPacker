@@ -21,7 +21,7 @@ my %WriteMakefileArgs = (
                        'BUILD_REQUIRES' => {},
                        'ABSTRACT' => 'pack your dependencies onto your script file',
                        'EXE_FILES' => [],
-                       'VERSION' => '1.100840',
+                       'VERSION' => '1.100841',
                        'PREREQ_PM' => {
                                         'Scalar::Util' => '0',
                                         'English' => '0',
@@ -31,6 +31,7 @@ my %WriteMakefileArgs = (
                                         'Dist::Zilla::Role::FileMunger' => '0',
                                         'File::Find' => '0',
                                         'File::Temp' => '0',
+                                        'File::Path' => '0',
                                         'Moose' => '0'
                                       },
                        'LICENSE' => 'perl'

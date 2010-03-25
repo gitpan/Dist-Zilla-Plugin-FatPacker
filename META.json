@@ -9,7 +9,7 @@
       "version" : 1.4,
       "url" : "http://module-build.sourceforge.net/META-spec-v1.4.html"
    },
-   "version" : "1.100840",
+   "version" : "1.100841",
    "name" : "Dist-Zilla-Plugin-FatPacker",
    "author" : [
       "Marcel Gruenauer <marcel@cpan.org>"
@@ -18,7 +18,7 @@
    "build_requires" : {},
    "provides" : {
       "Dist::Zilla::Plugin::FatPacker" : {
-         "version" : "1.100840",
+         "version" : "1.100841",
          "file" : "lib/Dist/Zilla/Plugin/FatPacker.pm"
       }
    },
@@ -32,6 +32,7 @@
       "Dist::Zilla::Role::FileMunger" : "0",
       "File::Find" : "0",
       "File::Temp" : "0",
+      "File::Path" : "0",
       "Moose" : "0"
    },
    "abstract" : "pack your dependencies onto your script file",
