@@ -3,9 +3,8 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::FatPacker;
-our $VERSION = '1.100841';
-
-# ABSTRACT: pack your dependencies onto your script file
+$Dist::Zilla::Plugin::FatPacker::VERSION = '1.141200';
+# ABSTRACT: Pack your dependencies onto your script file
 use File::Temp 'tempfile';
 use File::Path 'remove_tree';
 use Moose;
@@ -45,32 +44,37 @@ sub munge_file {
     warn "temp script [$temp_script]\n";
     print $fh $content;
     close $fh or die "can't close temp file $temp_script: $!\n";
+
+    $ENV{PERL5LIB} = join ':', grep defined, 'lib', $ENV{PERL5LIB};
     safe_system("fatpack trace $temp_script");
     safe_system("fatpack packlists-for `cat fatpacker.trace` >packlists");
     safe_system("fatpack tree `cat packlists`");
-    my $fatpack = `fatpack file`;
+    my $fatpack = `fatpack file $temp_script`;
 
     for ($temp_script, 'fatpacker.trace', 'packlists') {
         unlink $_ or die "can't unlink $_: $!\n";
     }
     safe_remove_tree('fatlib');
-    $file->content($fatpack . $content);
+    $file->content($fatpack);
 }
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
-
 __END__
+
 =pod
+
+=for test_synopsis 1;
+__END__
 
 =head1 NAME
 
-Dist::Zilla::Plugin::FatPacker - pack your dependencies onto your script file
+Dist::Zilla::Plugin::FatPacker - Pack your dependencies onto your script file
 
 =head1 VERSION
 
-version 1.100841
+version 1.141200
 
 =head1 SYNOPSIS
 
@@ -84,7 +88,7 @@ In C<dist.ini>:
 This plugin uses L<App::FatPacker> to pack your dependencies onto your script
 file.
 
-=head1 FUNCTIONS
+=head1 METHODS
 
 =head2 munge_file
 
@@ -93,6 +97,8 @@ it prepends its packed dependencies to the script.
 
 This process creates temporary files outside the build directory, but if there
 are no errors, they will be removed again.
+
+=head1 FUNCTIONS
 
 =head2 safe_remove_tree
 
@@ -103,42 +109,32 @@ error checks.
 
 This is a wrapper around C<system()> that adds some error checks.
 
-=for test_synopsis 1;
-__END__
-
 =head1 INSTALLATION
 
 See perlmodinstall for information and options on installing Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
-
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-FatPacker>.
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-FatPacker>.
 
 =head1 AVAILABILITY
 
+The project homepage is L<http://search.cpan.org/dist/Dist-Zilla-Plugin-FatPacker/>.
+
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see
-L<http://search.cpan.org/dist/Dist-Zilla-Plugin-FatPacker/>.
-
-The development version lives at
-L<http://github.com/hanekomu/Dist-Zilla-Plugin-FatPacker/>.
-Instead of sending patches, please fork this project using the standard git
-and github infrastructure.
+site near you, or see L<https://metacpan.org/module/Dist::Zilla::Plugin::FatPacker/>.
 
 =head1 AUTHOR
 
-  Marcel Gruenauer <marcel@cpan.org>
+Mike Doherty <doherty@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Marcel Gruenauer.
+This software is copyright (c) 2010 by Mike Doherty.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
